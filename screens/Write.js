@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Alert } from 'react-native';
 import colors from '../color';
 import styled from 'styled-components';
+import { useDB } from '../context';
 
 const Container = styled.View`
   flex: 1;
@@ -56,16 +57,27 @@ const EmotionText = styled.Text`
 
 const emotions = ['🤯', '🥲', '🤬', '🥰', '😊', '🤩'];
 
-const Write = () => {
+const Write = ({ navigation: { goBack } }) => {
+  const realm = useDB();
   const [selectedEmotion, setEmotion] = useState(null);
   const [feelings, setFeelings] = useState('');
+
   const onChangeText = (text) => setFeelings(text);
   const onEmotionPress = (face) => setEmotion(face);
   const onSubmit = () => {
     if (feelings === '' || selectedEmotion == null) {
       return Alert.alert('Please complete form.');
     }
+    realm.write(() => {
+      const feeling = realm.create('Feeling', {
+        _id: Date.now(),
+        emotion: selectedEmotion,
+        message: feelings,
+      });
+    });
+    goBack();
   };
+
   return (
     <Container>
       <Title>How do you feel now?</Title>

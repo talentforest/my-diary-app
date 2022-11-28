@@ -1,6 +1,6 @@
 const colors = {
-  bgColor: '#ffda79',
-  textColor: '#34ace0',
+  bgColor: '#FCF6F5',
+  textColor: '#7b9acc',
   cardColor: '#f7f1e3',
   btnColor: '#706fd3',
 };
